@@ -1,6 +1,7 @@
 import asyncio
 import os
 
+import signal
 import aiofiles as aiofiles
 import websockets
 
@@ -27,6 +28,7 @@ async def main():
     port = int(os.environ.get("PORT", 5000))
     loop = asyncio.get_running_loop()
     stop = loop.create_future()
+    loop.add_signal_handler(signal.SIGTERM, stop.set_result, None)
     async with websockets.serve(echo, "", port):
         await stop  # run forever
 
