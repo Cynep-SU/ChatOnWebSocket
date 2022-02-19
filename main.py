@@ -25,8 +25,10 @@ async def echo(websocket):
 
 async def main():
     port = int(os.environ.get("PORT", 5000))
-    async with websockets.serve(echo, "localhost", port):
-        await asyncio.Future()  # run forever
+    loop = asyncio.get_running_loop()
+    stop = loop.create_future()
+    async with websockets.serve(echo, "", port):
+        await stop  # run forever
 
 
 asyncio.run(main())
